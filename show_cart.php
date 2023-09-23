@@ -17,6 +17,8 @@ if ($id != '') {
     }
 }
 
+echo json_encode($_SESSION['cart'])
+
 ?>
 <?php include('./header.php') ?>
 <br>
@@ -40,7 +42,7 @@ if ($id != '') {
 
             if (is_array($_SESSION['cart'])) {
                 foreach ($_SESSION['cart'] as $id => $qty) {
-                    $res = db_query("SELECT * FROM books WHERE isbn='$id'");
+                    $res = db_query("SELECT * FROM books WHERE id='$id'");
 
                     foreach ($res as $row) {
                         echo '<tr>';
@@ -53,7 +55,7 @@ if ($id != '') {
                         echo '</tr>';
 
                         $sum_qty = $sum_qty + $qty;
-                        $sum_price = $sum_price + ($row->price * $qty);
+                        $sum_price = $sum_price + ($row['price'] * $qty);
                     }
                 }
                 echo '<tr><td></td><td></td><td></td><td></td><td></td><td>$' . $sum_price . '</td>';

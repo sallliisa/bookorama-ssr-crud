@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:4306:4306
--- Generation Time: Sep 22, 2023 at 09:06 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.0.28
+-- Host: localhost
+-- Generation Time: Sep 23, 2023 at 06:05 PM
+-- Server version: 8.0.31
+-- PHP Version: 7.4.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,18 +28,17 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `admin` (
-  `adminid` int(11) NOT NULL,
+  `adminid` int NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `admin`
 --
 
 INSERT INTO `admin` (`adminid`, `email`, `password`) VALUES
-(1, 'michelle@yahoo.com', '827ccb0eea8a706c4c34a16891f84e7b'),
-(2, 'test@gmail.com', '81dc9bdb52d04dc20036dbd8313ed055');
+(1, 'michelle@yahoo.com', '827ccb0eea8a706c4c34a16891f84e7b');
 
 -- --------------------------------------------------------
 
@@ -48,24 +47,26 @@ INSERT INTO `admin` (`adminid`, `email`, `password`) VALUES
 --
 
 CREATE TABLE `books` (
+  `id` int NOT NULL,
   `isbn` varchar(13) NOT NULL,
-  `title` varchar(100) DEFAULT NULL,
-  `categoryid` int(11) NOT NULL,
   `author` varchar(50) DEFAULT NULL,
-  `price` float(4,2) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `title` varchar(100) DEFAULT NULL,
+  `price` float(4,2) DEFAULT NULL,
+  `category_id` int NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `books`
 --
 
-INSERT INTO `books` (`isbn`, `title`, `categoryid`, `author`, `price`) VALUES
-('0-672-31697-8', 'Java 2 for Professional Developers', 4, 'Michael Morgan', 34.99),
-('0-672-31745-1', 'Installing Debian GNU/Linux', 4, 'Thomas Down', 24.99),
-('0-672-31509-2', 'Teach Yourself GIMP in 24 Hours', 4, 'Pruitt, et al.', 24.99),
-('0-672-31769-9', 'Caldera OpenLinux System Administration Unleashed', 4, 'Thomas Schenk', 49.99),
-('0-672-31281-1', 'Jakarta dan Debu Adalah Kawan', 3, 'Clarita Michelle', 66.99),
-('0-672-52769-9', 'Harry Potter and the Philosophers Stone', 2, 'Joanne Kathleen Rowling', 12.46);
+INSERT INTO `books` (`id`, `isbn`, `author`, `title`, `price`, `category_id`) VALUES
+(1, '0-672-31697-8', 'Michael Morgans', 'Java 2 for Professional Developers', 34.99, 3),
+(2, '0-672-31745-1', 'Thomas Down', 'Installing Debian GNU/Linux', 24.99, 2),
+(3, '0-672-31509-2', 'Pruitt, et al.', 'Teach Yourself GIMP in 24 Hours', 24.99, 1),
+(4, '0-672-31769-9', 'Thomas Schenk', 'Caldera OpenLinux System Administration Unleashed', 49.99, 2),
+(5, '0-672-31281-1', 'Clarita Michelle', 'Jakarta dan Debu Adalah Kawan', 66.99, 3),
+(6, '0', NULL, NULL, NULL, 0),
+(7, '123', '123', '123', 10.00, 1);
 
 -- --------------------------------------------------------
 
@@ -74,16 +75,17 @@ INSERT INTO `books` (`isbn`, `title`, `categoryid`, `author`, `price`) VALUES
 --
 
 CREATE TABLE `book_reviews` (
-  `isbn` char(13) NOT NULL,
-  `review` text DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `id` int NOT NULL,
+  `book_id` int NOT NULL,
+  `review` text
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `book_reviews`
 --
 
-INSERT INTO `book_reviews` (`isbn`, `review`) VALUES
-('0-672-31697-8', 'Morgan\'s book is clearly written and goes well beyond \r\n                     most of the basic Java books out there.');
+INSERT INTO `book_reviews` (`id`, `book_id`, `review`) VALUES
+(1, 1, 'Morgan\'s book is clearly written and goes well beyond \r\n                     most of the basic Java books out there.');
 
 -- --------------------------------------------------------
 
@@ -92,20 +94,18 @@ INSERT INTO `book_reviews` (`isbn`, `review`) VALUES
 --
 
 CREATE TABLE `categories` (
-  `categoryid` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL
+  `id` int NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `categories`
 --
 
-INSERT INTO `categories` (`categoryid`, `name`) VALUES
-(1, 'Science Fiction'),
-(2, 'Fantasy'),
-(3, 'History'),
-(4, 'Technology'),
-(5, 'Psychology');
+INSERT INTO `categories` (`id`, `name`) VALUES
+(1, 'Novel Dewasa'),
+(2, 'Science Fiction'),
+(3, 'Romance');
 
 -- --------------------------------------------------------
 
@@ -114,23 +114,20 @@ INSERT INTO `categories` (`categoryid`, `name`) VALUES
 --
 
 CREATE TABLE `customers` (
-  `customerid` int(10) UNSIGNED NOT NULL,
+  `customerid` int UNSIGNED NOT NULL,
   `name` varchar(50) NOT NULL,
   `address` varchar(100) NOT NULL,
   `city` varchar(30) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `customers`
 --
 
 INSERT INTO `customers` (`customerid`, `name`, `address`, `city`) VALUES
-(1, 'Michelle Arthur', '357 North Road A', 'Box Hill'),
-(2, 'Anne', 'Boulevard \' Street', 'Yarraville'),
-(3, 'Melly', 'Vicoria Street', 'Airport West'),
-(4, 'Rose', 'Queen Street', 'Airport West'),
-(5, 'Alan Wonga', 'Buanglow Street', 'Airport West'),
-(6, 'Dionysius Mario', 'Jl. Nangka IV No. 39, RT 04/RW 01, Cengkareng Barat', 'Box Hill');
+(1, 'Rose', 'Queen Street', 'Airport West'),
+(2, 'Alan Wonga', 'Buanglow Street', 'Airport West'),
+(3, 'Dionysius Mario', 'Jl. Nangka IV No. 39, RT 04/RW 01, Cengkareng Barat', 'Box Hill');
 
 -- --------------------------------------------------------
 
@@ -139,11 +136,11 @@ INSERT INTO `customers` (`customerid`, `name`, `address`, `city`) VALUES
 --
 
 CREATE TABLE `orders` (
-  `orderid` int(10) UNSIGNED NOT NULL,
-  `customerid` int(10) UNSIGNED NOT NULL,
+  `orderid` int UNSIGNED NOT NULL,
+  `customerid` int UNSIGNED NOT NULL,
   `amount` float(6,2) DEFAULT NULL,
   `date` date NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `orders`
@@ -162,10 +159,10 @@ INSERT INTO `orders` (`orderid`, `customerid`, `amount`, `date`) VALUES
 --
 
 CREATE TABLE `order_items` (
-  `orderid` int(10) UNSIGNED NOT NULL,
+  `orderid` int UNSIGNED NOT NULL,
   `isbn` char(13) NOT NULL,
-  `quantity` tinyint(3) UNSIGNED DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `quantity` tinyint UNSIGNED DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `order_items`
@@ -192,19 +189,21 @@ ALTER TABLE `admin`
 -- Indexes for table `books`
 --
 ALTER TABLE `books`
-  ADD PRIMARY KEY (`isbn`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `books_FK_1` (`category_id`);
 
 --
 -- Indexes for table `book_reviews`
 --
 ALTER TABLE `book_reviews`
-  ADD PRIMARY KEY (`isbn`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `book_reviews_FK_1` (`book_id`);
 
 --
 -- Indexes for table `categories`
 --
 ALTER TABLE `categories`
-  ADD PRIMARY KEY (`categoryid`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `customers`
@@ -232,19 +231,37 @@ ALTER TABLE `order_items`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `adminid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `adminid` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `books`
+--
+ALTER TABLE `books`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `book_reviews`
+--
+ALTER TABLE `book_reviews`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `customerid` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=128;
+  MODIFY `customerid` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=128;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `orderid` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `orderid` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

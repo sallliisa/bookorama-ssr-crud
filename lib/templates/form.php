@@ -31,7 +31,6 @@
   }
 ?>
 
-<?php require('../../lib/layouts/header.php') ?>
 <div class="card mt-5">
   
   <div class="card-header"><?php echo $config['title'] ?></div>
@@ -40,21 +39,28 @@
       <?php
         foreach ($config['fields'] as $field) {
           echo "<div class='form-group'>";
-            if (isset($config['fieldsAlias'][$field])) {
-              echo "<label for='{$field}'>{$config['fieldsAlias'][$field]}:</label>";  
-            } else {
-              echo "<label for='{$field}'>{$field}</label>";
-            }
+          if (isset($config['fieldsAlias'][$field])) {
+            echo "<label for='{$field}'>{$config['fieldsAlias'][$field]}:</label>";  
+          } else {
+            echo "<label for='{$field}'>{$field}</label>";
+          }
 
-            if ($config['inputConfig'][$field]['type'] == 'text') {
-              echo "<input class='form-control' type='{$config['inputConfig'][$field]['type']}' name='{$field}' id='{$field}' value='{$formData[$field]}'". ($config['inputConfig'][$field]['required'] ? 'required' : '') ."></input>";
-            } elseif ($config['inputConfig'][$field]['type'] == 'textarea') {
-              echo "<textarea class='form-control' type='{$config['inputConfig'][$field]['type']}' name='{$field}' id='{$field}'". ($config['inputConfig'][$field]['required'] ? 'required' : '') .">{$formData[$field]}</textarea>";
+          if ($config['inputConfig'][$field]['type'] == 'text') {
+            echo "<input class='form-control' type='{$config['inputConfig'][$field]['type']}' name='{$field}' id='{$field}' value='{$formData[$field]}'". ($config['inputConfig'][$field]['required'] ? 'required' : '') ."></input>";
+          } elseif ($config['inputConfig'][$field]['type'] == 'textarea') {
+            echo "<textarea class='form-control' type='{$config['inputConfig'][$field]['type']}' name='{$field}' id='{$field}'". ($config['inputConfig'][$field]['required'] ? 'required' : '') .">{$formData[$field]}</textarea>";
+          } elseif ($config['inputConfig'][$field]['type'] == 'lookup') {
+            $lookup_data = db_list("SELECT * FROM {$config['inputConfig'][$field]['modelAPI']}");
+            echo "<select class='form-control' name='{$field}' id='{$field}' ".($config['inputConfig'][$field]['required'] ? 'required' : '').">";
+            foreach ($lookup_data as $row) {
+              echo "<option value='{$row[$config['inputConfig'][$field]['pick']]}'". ($formData[$field] == $row[$config['inputConfig'][$field]['pick']] ? 'selected' : '') .">{$row[$config['inputConfig'][$field]['view']]}</option>";
             }
-            
-            if (isset($formErrors[$field])) {
-              echo "<div class='error'>{$formErrors[$field]}</div>";
-            }
+            echo "</select>";
+          }
+          
+          if (isset($formErrors[$field])) {
+            echo "<div class='error'>{$formErrors[$field]}</div>";
+          }
           echo "</div>";
         }
       ?>
@@ -62,4 +68,3 @@
     </form>
   </div>
 </div>
-<?php require('../../lib/layouts/footer.php') ?>

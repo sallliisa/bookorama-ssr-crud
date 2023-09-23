@@ -34,13 +34,6 @@ function db_single(string $query) {
     return db_query($query)[0];
 }
 
-function array_map_assoc($array){
-    $r = array();
-    foreach ($array as $key=>$value)
-      $r[$key] = "$key='$value'";
-    return $r;
-}
-
 function db_update(string $model, string $identifier, string $id, array $data) {
     $r = array();
     foreach ($data as $key=>$value) {
