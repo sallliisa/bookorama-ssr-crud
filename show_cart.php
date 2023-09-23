@@ -17,8 +17,6 @@ if ($id != '') {
     }
 }
 
-echo json_encode($_SESSION['cart'])
-
 ?>
 <?php include('./header.php') ?>
 <br>
