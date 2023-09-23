@@ -46,10 +46,10 @@ function db_update(string $model, string $identifier, string $id, array $data) {
     foreach ($data as $key=>$value) {
         $r[$key] = "$key='$value'";
     }
-    return db_query("UPDATE $model SET " . implode(' , ', $r) . "WHERE {$identifier}='{$id}'");
+    return db_query("UPDATE {$model} SET " . implode(' , ', $r) . "WHERE {$identifier}='{$id}'");
 }
 
 function db_insert(string $model, array $data) {
-    // return db_query("INSERT INTO $model SET " . )
+    return db_query("INSERT INTO {$model} (" . implode(',', array_keys($data)) . ") VALUES (" . implode(',', array_map(function ($value) {return "'{$value}'";}, array_values($data))) . ")");
 }
 ?>

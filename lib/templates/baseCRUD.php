@@ -1,6 +1,6 @@
 <?php
   require_once('../../lib/db.php');
-  $res = db_query("SELECT * FROM {$config['name']}");
+  $res = db_list("SELECT * FROM {$config['name']}");
 ?>
 
 <?php require('../../lib/layouts/header.php') ?>
@@ -44,7 +44,7 @@
               echo "</td>";
             }
             if (isset($config['actions'])) {
-              echo "<td>";
+              echo "<td class='d-flex flex-row align-items-center gap-1'>";
               echo $config['actions']($row);
               echo "</td>";
             }

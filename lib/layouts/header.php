@@ -13,4 +13,19 @@
 </head>
 
 <body>
+    <div class="w-100 p-4 bg-light d-flex flex-row justify-content-between align-items-center">
+        <div>Bookorama</div>
+        <div class="d-flex flex-row align-items-center gap-2">
+            <?php
+                $menu = [
+                    "Books" => "/views/books/list.php",
+                    "Customers" => "/views/customers/list.php",
+                    "Categories" => "/views/categories/list.php",
+                ];
+                foreach ($menu as $name => $url) {
+                    echo "<a class='btn btn-link' href='{$url}'>{$name}</a>";
+                }
+            ?>
+        </div>
+    </div>
     <div class="container">

@@ -24,7 +24,7 @@
       if ($_GET['view'] == 'edit') {
         db_update($config['name'], $config['id'], $_GET['id'], $formData);
       } else {
-
+        db_insert($config['name'], $formData);
       }
       header("Location: list.php");
     }
@@ -36,7 +36,7 @@
   
   <div class="card-header"><?php echo $config['title'] ?></div>
   <div class="card-body">
-    <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) . '?id=' . $_GET['id'] ?>" method="POST" autocomplete="on" class="d-flex flex-column gap-4">
+    <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) . '?id=' . $_GET['id'] . '&view=' . $_GET['view'] ?>" method="POST" autocomplete="on" class="d-flex flex-column gap-4">
       <?php
         foreach ($config['fields'] as $field) {
           echo "<div class='form-group'>";
