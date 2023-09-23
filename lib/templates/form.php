@@ -16,7 +16,7 @@
       <?php
         foreach ($config['fieldAdd'] as $field) {
           echo "<div>";
-          echo $field;
+          echo "<input></input>";
           echo "</div>";
         }
       ?>
