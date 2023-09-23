@@ -1,4 +1,4 @@
 <?php
   require_once('../../configs/customers.php');
-  require_once('../../lib/templates/baseCRUD.php')
+  require_once('../../lib/templates/form.php')
 ?>

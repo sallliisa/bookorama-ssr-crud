@@ -5,7 +5,14 @@
 
 <?php require('../../lib/layouts/header.php') ?>
 <div class="card mt-5">
-  <div class="card-header"><?php echo $config['title'] ?></div>
+  <div class="card-header d-flex flex-row justify-content-between">
+    <div><?php echo $config['title'] ?></div>
+    <?php
+      if ($config['allowCreate']) {
+        echo "<a class='btn btn-primary btn-sm' href='form.php?view=create'>+ Tambah</a>";
+      }
+    ?>
+  </div>
   <div class="card-body">
       <table class="table table-striped">
         <tr>

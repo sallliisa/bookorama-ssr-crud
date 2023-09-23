@@ -15,10 +15,41 @@ function db_query(string $query) {
     if (!$res) {
         die ("An error occured: {$db->error}");
     }
-    $rows = array();
-    while ($row = $res->fetch_assoc()) {
-        $rows[] = $row;
+    if (is_bool($res)) {
+        return $res;
+    } else {
+        $rows = array();
+        while ($row = $res->fetch_assoc()) {
+            $rows[] = $row;
+        }
+        return $rows;
     }
-    return $rows;
+}
+
+function db_list(string $query) {
+    return db_query($query);
+}
+
+function db_single(string $query) {
+    return db_query($query)[0];
+}
+
+function array_map_assoc($array){
+    $r = array();
+    foreach ($array as $key=>$value)
+      $r[$key] = "$key='$value'";
+    return $r;
+}
+
+function db_update(string $model, string $identifier, string $id, array $data) {
+    $r = array();
+    foreach ($data as $key=>$value) {
+        $r[$key] = "$key='$value'";
+    }
+    return db_query("UPDATE $model SET " . implode(' , ', $r) . "WHERE {$identifier}='{$id}'");
+}
+
+function db_insert(string $model, array $data) {
+    // return db_query("INSERT INTO $model SET " . )
 }
 ?>
