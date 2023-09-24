@@ -1,13 +1,14 @@
 <?php
 session_start();
-require_once('./lib/db_login.php');
+require_once('./lib/db.php');
+require_once('./lib/utils.php');
 
 // Memeriksa apakah user sudah submit form
 if (isset($_POST['submit'])) {
     $valid = TRUE;
 
     // Memeriksa validasi email
-    $email = test_input($_POST['email']);
+    $email = sanitize($_POST['email']);
     if ($email == '') {
         $error_email = 'Email is required';
         $valid = FALSE;
@@ -17,7 +18,7 @@ if (isset($_POST['submit'])) {
     }
 
     // Memeriksa validasi password
-    $password = test_input($_POST['password']);
+    $password = sanitize($_POST['password']);
     if ($password == '') {
         $error_password = 'Password is required';
         $valid = FALSE;
@@ -34,7 +35,7 @@ if (isset($_POST['submit'])) {
             if ($result->num_rows > 0) {
                 echo '<span class="error">login suceed</span>';
                 $_SESSION['username'] = $email;
-                header('Location: view_customer.php');
+                header('Location: views/books/list.php');
                 exit;
             } else {
                 echo '<span class="error">Username and/or password is incorrect</span>';

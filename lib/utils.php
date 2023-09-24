@@ -1,5 +1,5 @@
 <?php
-function test_input($data) {
+function sanitize($data) {
   $data = trim($data);
   $data = stripslashes($data);
   $data = htmlspecialchars($data);
