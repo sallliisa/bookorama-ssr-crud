@@ -40,7 +40,7 @@ if ($id != '') {
 
             if (is_array($_SESSION['cart'])) {
                 foreach ($_SESSION['cart'] as $id => $qty) {
-                    $res = db_query("SELECT * FROM books WHERE id='$id'");
+                    $res = db_query("SELECT * FROM books WHERE id='$id'", null, null);
 
                     foreach ($res as $row) {
                         echo '<tr>';

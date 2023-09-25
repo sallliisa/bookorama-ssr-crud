@@ -36,7 +36,6 @@ $config = [
     echo "<div class='d-flex flex-row gap-1'>";
       echo "<a class='btn btn-info btn-sm' href='detail.php?id=".$row['orderid']."'>Detail</a>";
     echo "</div>";
-  },
-  "allowCreate" => true
+  }
 ]
 ?>

@@ -1,7 +1,7 @@
 <?php
     require_once('./lib/db.php');
     require_once('./configs/books.php');
-    $res = db_query("SELECT * FROM books");
+    $res = db_query("SELECT * FROM books", null, null);
 ?>
 
 <?php include('./header.php') ?>

@@ -18,6 +18,7 @@
       $formData[$field] = $_POST[$field];
       if (isset($config['inputConfig'][$field]['validator'])) {
         $valid = $config['inputConfig'][$field]['validator']($_POST[$field]);
+        $formErrors[$field] = "Data tidak valid!";
       }
     }
     if ($valid) {
@@ -32,7 +33,6 @@
 ?>
 
 <div class="card mt-5">
-  
   <div class="card-header"><?php echo $config['title'] ?></div>
   <div class="card-body">
     <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) . '?id=' . $_GET['id'] . '&view=' . $_GET['view'] ?>" method="POST" autocomplete="on" class="d-flex flex-column gap-4">

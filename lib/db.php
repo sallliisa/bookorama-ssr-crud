@@ -6,18 +6,25 @@ $db_password = '12345';
 
 $db = new mysqli($db_host, $db_username, $db_password, $db_database);
 if ($db->connect_errno) {
-    die ("gamer:". $db->connect_error);
+    die ("Error while connecting:". $db->connect_error);
 }
 
-function db_query(string $query) {
+$db->autocommit(FALSE);
+
+function db_query(string $query, ?array $params, ?string $types) {
     global $db;
-    $res = $db->query($query);
-    if (!$res) {
-        die ("An error occured: {$db->error}");
+    $statement = $db->prepare($query);
+    if ($params && $types) {
+        $statement->bind_param($types, ...$params);
     }
+    $statement->execute();
+    $res = $statement->get_result();
     if (is_bool($res)) {
-        return $res;
+        return !$statement->affected_rows == -1;
     } else {
+        if (!$res) {
+            die ("An error occured: {$db->error}");
+        }
         $rows = array();
         while ($row = $res->fetch_assoc()) {
             $rows[] = $row;
@@ -27,22 +34,51 @@ function db_query(string $query) {
 }
 
 function db_list(string $query) {
-    return db_query($query);
+    return db_query($query, null, null);
 }
 
 function db_single(string $query) {
-    return db_query($query)[0];
+    return db_query($query, null, null)[0];
 }
 
 function db_update(string $model, string $identifier, string $id, array $data) {
+    global $db;
     $r = array();
     foreach ($data as $key=>$value) {
-        $r[$key] = "$key='$value'";
+        $r[] = "$key=?";
     }
-    return db_query("UPDATE {$model} SET " . implode(' , ', $r) . "WHERE {$identifier}='{$id}'");
+    $res = db_query("UPDATE {$model} SET " . implode(' , ', $r) . " WHERE {$identifier}='{$id}'", array_values($data), implode("", array_fill(0, count($data), "s")));
+    if (!$res) {
+        $db->rollback();
+    } else {
+        $db->commit();
+    }
 }
 
 function db_insert(string $model, array $data) {
-    return db_query("INSERT INTO {$model} (" . implode(',', array_keys($data)) . ") VALUES (" . implode(',', array_map(function ($value) {return "'{$value}'";}, array_values($data))) . ")");
+    global $db;
+    $res = db_query("INSERT INTO {$model} (" . implode(',', array_keys($data)) . ") VALUES (" . implode(' , ', array_fill(0, count($data), "?")) . ")", array_values($data), implode("", array_fill(0, count($data), "s")));
+    if (!$res) {
+        $db->rollback();
+    } else {
+        $db->commit();
+    }
 }
+
+// function db_query(string $query) {
+//     global $db;
+//     $res = $db->query($query);
+//     if (!$res) {
+//         die ("An error occured: {$db->error}");
+//     }
+//     if (is_bool($res)) {
+//         return $res;
+//     } else {
+//         $rows = array();
+//         while ($row = $res->fetch_assoc()) {
+//             $rows[] = $row;
+//         }
+//         return $rows;
+//     }
+// }
 ?>

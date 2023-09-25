@@ -45,13 +45,12 @@
       }
     }
     $finalQuery .= " WHERE TRUE " . " AND (" . implode(" OR ", $searchableList) . ")";
-    if (count($filterableList)) {
+    if (isset($filterableList) && count($filterableList)) {
       $finalQuery .= " AND (". implode(" AND ", $filterableList) .")";
     }
   }
 
   $finalQuery .= " LIMIT $limit OFFSET $offset";
-  // die($finalQuery);
   $res = db_list($finalQuery);
 
 ?>
@@ -131,7 +130,9 @@
           }
           echo '</table>';
           echo '<br />';
-          echo "Total Rows: ". count($res);
+          if (isset($res)) {
+            echo "Total Rows: ". count($res);
+          }
         ?>
   </div>
 </div>
